@@ -1,5 +1,9 @@
 import { Actor, CollisionType, Color } from "excalibur";
+
 import { SIZE } from "../constants";
+import { brickImage } from "../resources";
+
+const sprite = brickImage.toSprite();
 
 export type TileConfig = {
     x: number;
@@ -16,7 +20,6 @@ export class Tile extends Actor{
         x,
         y,
         isStatic,
-
         color,
     }: TileConfig){
         super({
@@ -29,5 +32,6 @@ export class Tile extends Actor{
         })
 
         this.isStatic = isStatic;
+        if (isStatic) this.graphics.use(sprite);
     }
 }

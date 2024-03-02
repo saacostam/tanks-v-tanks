@@ -1,14 +1,16 @@
-import { Color, DisplayMode, Engine } from 'excalibur'
+import { Color, DisplayMode, Engine, Loader } from 'excalibur'
 
 import { Tank } from './actors';
 import { HEIGHT, N_HORIZONTAL_TILES, N_VERTICAL_TILES, SIZE, WIDTH } from './constants';
+import { addLevelToEngine, generateLevel } from './level';
+import { brickImage } from './resources';
 
 import './style.css'
-import { addLevelToEngine, generateLevel } from './level';
 
 const game = new Engine({
     width: WIDTH,
     height: HEIGHT,
+    antialiasing: true,
     displayMode: DisplayMode.FitScreen,
 })
 
@@ -26,4 +28,6 @@ game.add(new Tank({
     color: Color.Rose,
 }));
 
-game.start();
+game.start(new Loader([
+    brickImage,
+]));
