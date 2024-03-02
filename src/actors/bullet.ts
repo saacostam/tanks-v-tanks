@@ -2,6 +2,7 @@ import { Actor, Color, Side, Vector } from "excalibur";
 
 import { Tile } from "../enviroment";
 import { Tank } from ".";
+import { Particle } from "../graphics";
 
 export interface BulletConfig{
     x: number;
@@ -11,8 +12,9 @@ export interface BulletConfig{
 }
 
 export class Bullet extends Actor{
-    public static BulletVelocity = 300;
-    public static BulletBounceCountMax = 5;
+    public static Velocity = 300;
+    public static BounceCountMax = 5;
+    public static ParticleCountOnDeath = 10;
 
     private _bounceCounter = 0;
 
@@ -34,16 +36,16 @@ export class Bullet extends Actor{
             Math.cos(this.rotation),
             Math.sin(this.rotation),
         )
-        this.pos = this.pos.add(dir.scale(Bullet.BulletVelocity/10));
+        this.pos = this.pos.add(dir.scale(Bullet.Velocity/10));
 
         this.vel.setTo(
-            Math.cos(this.rotation) * Bullet.BulletVelocity,
-            Math.sin(this.rotation) * Bullet.BulletVelocity,
+            Math.cos(this.rotation) * Bullet.Velocity,
+            Math.sin(this.rotation) * Bullet.Velocity,
         );
 
         this.on('collisionstart', (e) => {
             if (e.other instanceof Tile && e.other.isStatic){
-                if (this._bounceCounter < Bullet.BulletBounceCountMax){
+                if (this._bounceCounter < Bullet.BounceCountMax){
                     switch (e.side){
                         case Side.Top:
                         case Side.Bottom:
@@ -56,8 +58,8 @@ export class Bullet extends Actor{
                     }
 
                     const dir = new Vector(
-                        Math.cos(e.actor.rotation) * Bullet.BulletVelocity,
-                        Math.sin(e.actor.rotation) * Bullet.BulletVelocity,
+                        Math.cos(e.actor.rotation) * Bullet.Velocity,
+                        Math.sin(e.actor.rotation) * Bullet.Velocity,
                     )
 
                     e.actor.vel.setTo(dir.x, dir.y);                    
@@ -69,5 +71,19 @@ export class Bullet extends Actor{
                 e.other.kill();
             }
         })
+    }
+
+    public kill(): void {
+        for (let i = 0; i < Bullet.ParticleCountOnDeath; i++){
+            this.scene?.add(
+                new Particle({
+                    x: this.pos.x,
+                    y: this.pos.y,
+                    color: this.color,
+                    radius: 2,
+                })
+            )
+        }
+        super.kill();    
     }
 }

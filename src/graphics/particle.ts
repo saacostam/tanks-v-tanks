@@ -4,6 +4,7 @@ interface ParticleConfig{
     x: number;
     y: number;
     color: Color;
+    radius?: number;
 }
 
 export class Particle extends Actor{
@@ -16,13 +17,15 @@ export class Particle extends Actor{
         x,
         y,
         color,
+        radius,
     }: ParticleConfig){
+        radius = radius || 3;
+
         super({
             x: x,
             y: y,
             color: color,
-
-            radius: 3,
+            radius: radius,
         });
 
         const VARIATION = 0.5;

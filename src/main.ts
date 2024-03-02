@@ -11,6 +11,7 @@ const game = new Engine({
     width: WIDTH,
     height: HEIGHT,
     antialiasing: true,
+    suppressPlayButton: true,
     displayMode: DisplayMode.FitScreen,
 })
 
@@ -23,8 +24,8 @@ const level = generateLevel({
 addLevelToEngine(game, level);
 
 game.add(new Tank({
-    x: WIDTH/2,
-    y: HEIGHT/2,
+    x: SIZE * 3,
+    y: HEIGHT - (SIZE * 3),
     color: Color.DarkGray,
 }));
 
