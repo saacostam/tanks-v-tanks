@@ -1,16 +1,19 @@
 import { Actor, Color, Vector, Engine, Keys, CollisionType } from "excalibur";
+
 import { Bullet } from ".";
 import { SIZE } from "../constants";
+import { Particle } from '../graphics';
 
-type TankConfig = {
+interface TankConfig{
     x: number;
     y: number;
 }
 
 export class Tank extends Actor{
-    public static TankForwardVelocity = 0.2;
-    public static TankRotationVelocity = 0.003;
-    public static TankShootingTimeout = 1000;
+    public static ForwardVelocity = 0.2;
+    public static RotationVelocity = 0.003;
+    public static ShootingTimeout = 1000;
+    public static ParticleCountOnDeath = 20;
 
     private _health: number = 100;
     private _shootingTimeout = 0;
@@ -36,14 +39,14 @@ export class Tank extends Actor{
 
         this.updateTimeouts(delta);
 
-        const moveForwardAmount = delta * Tank.TankForwardVelocity;
+        const moveForwardAmount = delta * Tank.ForwardVelocity;
         if (keyboard.isHeld(Keys.ArrowUp)){
             this.moveForward(moveForwardAmount);
         }else if (keyboard.isHeld(Keys.ArrowDown)){
             this.moveForward(-0.5 * moveForwardAmount);
         }
 
-        const rotationAmount = delta * Tank.TankRotationVelocity;
+        const rotationAmount = delta * Tank.RotationVelocity;
         if (keyboard.isHeld(Keys.ArrowRight)){
             this.rotation += rotationAmount;
         }else if (keyboard.isHeld(Keys.ArrowLeft)){
@@ -57,7 +60,7 @@ export class Tank extends Actor{
                 rotation: this.rotation,
             }));
 
-            this._shootingTimeout = Tank.TankShootingTimeout;
+            this._shootingTimeout = Tank.ShootingTimeout;
         }
     }
 
@@ -67,6 +70,20 @@ export class Tank extends Actor{
 
     public updateTimeouts(delta: number){
         this._shootingTimeout = Math.max(0, this._shootingTimeout - delta);
+    }
+
+    public kill(): void {
+        for (let i = 0; i < Tank.ParticleCountOnDeath; i++){
+            this.scene?.add(
+                new Particle({
+                    x: this.pos.x,
+                    y: this.pos.y,
+                    color: this.color,
+                })
+            );
+        }
+
+        super.kill();    
     }
 
     set health(val: number){

@@ -1,7 +1,9 @@
 import { Actor, Color, Side, Vector } from "excalibur";
-import { Tile } from "../enviroment";
 
-export type BulletConfig = {
+import { Tile } from "../enviroment";
+import { Tank } from ".";
+
+export interface BulletConfig{
     x: number;
     y: number;
     rotation: number;
@@ -59,6 +61,10 @@ export class Bullet extends Actor{
                     e.actor.vel.setTo(dir.x, dir.y);                    
                     this._bounceCounter += 1;
                 }else this.kill();
+            }
+
+            if (e.other instanceof Tank){
+                e.other.kill();
             }
         })
     }
