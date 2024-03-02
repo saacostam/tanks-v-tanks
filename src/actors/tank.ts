@@ -3,6 +3,9 @@ import { Actor, Color, Vector, Engine, Keys, CollisionType } from "excalibur";
 import { Bullet } from ".";
 import { SIZE } from "../constants";
 import { Particle } from '../graphics';
+import { tankImage } from "../resources";
+
+const sprite = tankImage.toSprite();
 
 interface TankConfig{
     x: number;
@@ -34,6 +37,8 @@ export class Tank extends Actor{
         })
 
         this.rotation = (2 * Math.PI * Math.random());
+
+        this.graphics.use(sprite);
     }
 
     public update(engine: Engine, delta: number): void {
