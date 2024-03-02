@@ -7,6 +7,7 @@ import { Particle } from '../graphics';
 interface TankConfig{
     x: number;
     y: number;
+    color: Color;
 }
 
 export class Tank extends Actor{
@@ -21,13 +22,14 @@ export class Tank extends Actor{
     constructor({
         x,
         y,
+        color,
     }: TankConfig){
         super({
             x: x,
             y: y,
             width: SIZE,
             height: SIZE,
-            color: Color.Green,
+            color: color,
             collisionType: CollisionType.Active,
         })
 
@@ -57,6 +59,7 @@ export class Tank extends Actor{
             engine.currentScene.add(new Bullet({
                 x: this.pos.x,
                 y: this.pos.y,
+                color: this.color,
                 rotation: this.rotation,
             }));
 

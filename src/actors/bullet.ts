@@ -6,6 +6,7 @@ import { Tank } from ".";
 export interface BulletConfig{
     x: number;
     y: number;
+    color: Color;
     rotation: number;
 }
 
@@ -18,13 +19,14 @@ export class Bullet extends Actor{
     constructor({
         x,
         y,
+        color,
         rotation,
     }: BulletConfig){
         super({
             x: x,
             y: y,
             rotation: rotation,
-            color: Color.Green,
+            color: color,
             radius: 3,
         });
 

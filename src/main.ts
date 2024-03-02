@@ -1,4 +1,4 @@
-import { DisplayMode, Engine } from 'excalibur'
+import { Color, DisplayMode, Engine } from 'excalibur'
 
 import { Tank } from './actors';
 import { HEIGHT, N_HORIZONTAL_TILES, N_VERTICAL_TILES, SIZE, WIDTH } from './constants';
@@ -23,6 +23,7 @@ addLevelToEngine(game, level);
 game.add(new Tank({
     x: WIDTH/2,
     y: HEIGHT/2,
+    color: Color.Rose,
 }));
 
 game.start();
