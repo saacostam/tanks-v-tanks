@@ -26,7 +26,7 @@ addLevelToEngine(game, level);
 game.add(new Tank({
     x: SIZE * 3,
     y: HEIGHT - (SIZE * 3),
-    color: new Color(255, 140, 0),
+    color: Color.Green,
 }));
 
 game.start(new Loader([

@@ -1,7 +1,7 @@
 import { Actor, Color, Vector, Engine, Keys, CollisionType } from "excalibur";
 
 import { Bullet } from ".";
-import { SIZE } from "../constants";
+import { ORANGE, SIZE } from "../constants";
 import { Particle } from '../graphics';
 import { tankImage } from "../resources";
 
@@ -36,8 +36,6 @@ export class Tank extends Actor{
             collisionType: CollisionType.Active,
         })
 
-        this.rotation = (2 * Math.PI * Math.random());
-
         this.graphics.use(sprite);
     }
 
@@ -64,7 +62,7 @@ export class Tank extends Actor{
             engine.currentScene.add(new Bullet({
                 x: this.pos.x,
                 y: this.pos.y,
-                color: this.color,
+                color: Color.Yellow,
                 rotation: this.rotation,
             }));
 
@@ -86,12 +84,13 @@ export class Tank extends Actor{
                 new Particle({
                     x: this.pos.x,
                     y: this.pos.y,
-                    color: this.color,
+                    radius: 2,
+                    color: Math.random() < 0.5 ? ORANGE : Color.White,
                 })
             );
         }
 
-        super.kill();    
+        super.kill();
     }
 
     set health(val: number){
