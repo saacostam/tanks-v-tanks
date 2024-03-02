@@ -1,9 +1,10 @@
 import { Actor, CollisionType, Color } from "excalibur";
 
-import { SIZE } from "../constants";
-import { brickImage } from "../resources";
+import { ALL_DIRECTIONS, SIZE } from "../constants";
+import { brickImage, floorImage } from "../resources";
 
-const sprite = brickImage.toSprite();
+const brickSprite = brickImage.toSprite();
+const floorSprite = floorImage.toSprite();
 
 export type TileConfig = {
     x: number;
@@ -32,6 +33,11 @@ export class Tile extends Actor{
         })
 
         this.isStatic = isStatic;
-        if (isStatic) this.graphics.use(sprite);
+        if (isStatic) this.graphics.use(brickSprite);
+        else {
+            this.rotation = ALL_DIRECTIONS[Math.floor(Math.random() * ALL_DIRECTIONS.length)];
+
+            this.graphics.use(floorSprite)
+        };
     }
 }
