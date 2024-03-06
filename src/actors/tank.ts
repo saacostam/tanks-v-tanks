@@ -18,9 +18,12 @@ export class Tank extends Actor{
     public static RotationVelocity = 0.003;
     public static ShootingTimeout = 1000;
     public static ParticleCountOnDeath = 20;
+    
+    public static CreateRoadMarksTimeout = 30;
 
-    private _health: number = 100;
+    private _health = 100;
     private _shootingTimeout = 0;
+    private _roadMarksTimeout = 0;
 
     constructor({
         x,
@@ -37,6 +40,7 @@ export class Tank extends Actor{
         })
 
         this.graphics.use(sprite);
+        this.z = 1000;
     }
 
     public update(engine: Engine, delta: number): void {
@@ -68,6 +72,36 @@ export class Tank extends Actor{
 
             this._shootingTimeout = Tank.ShootingTimeout;
         }
+
+        if (this._roadMarksTimeout >= Tank.CreateRoadMarksTimeout) {
+            this._roadMarksTimeout = 0;
+            
+            const DIRECTION = new Vector(Math.cos(this.rotation), Math.sin(this.rotation)).normalize();
+            
+            const leftPathParticlePosVector = this.pos.add(DIRECTION.rotate(Math.PI/2).scale((this.width/2)*0.9)).add(DIRECTION.rotate(Math.PI).scale(this.height/2));
+            this.scene?.add(
+                new Particle({
+                    x: leftPathParticlePosVector.x,
+                    y: leftPathParticlePosVector.y,
+                    radius: 2,
+                    color: Color.Black,
+                    velocity: 0.1,
+                    ttl: 500,
+                })
+            )
+                
+            const rightPathParticlePosVector = this.pos.add(DIRECTION.rotate(-Math.PI/2).scale((this.width/2)*0.9)).add(DIRECTION.rotate(Math.PI).scale(this.height/2));
+            this.scene?.add(
+                new Particle({
+                    x: rightPathParticlePosVector.x,
+                    y: rightPathParticlePosVector.y,
+                    radius: 2,
+                    color: Color.Black,
+                    velocity: 0,
+                    ttl: 500,
+                })
+            )
+        }
     }
 
     public moveForward(amount: number){
@@ -76,6 +110,7 @@ export class Tank extends Actor{
 
     public updateTimeouts(delta: number){
         this._shootingTimeout = Math.max(0, this._shootingTimeout - delta);
+        this._roadMarksTimeout += Math.max(0, Math.min(delta, Tank.CreateRoadMarksTimeout));
     }
 
     public kill(): void {

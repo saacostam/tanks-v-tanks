@@ -26,7 +26,7 @@ export class Particle extends Actor{
     }: ParticleConfig){
         ttl = ttl || Particle.TTL;
         radius = radius || 3;
-        velocity = velocity || Particle.Velocity;
+        velocity = velocity === 0 ? 0 : velocity ? velocity : Particle.Velocity;
 
         super({
             x: x,
