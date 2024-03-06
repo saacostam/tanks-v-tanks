@@ -29,8 +29,13 @@ game.add(new Tank({
     color: Color.Green,
 }));
 
-game.start(new Loader([
+const resourceLoader = new Loader([
     brickImage,
     floorImage,
     tankImage,
-]));
+]);
+
+resourceLoader.backgroundColor = '#2a2a2a';
+resourceLoader.loadingBarColor = Color.fromHex('#278d33');
+
+game.start(resourceLoader);
